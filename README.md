@@ -50,19 +50,17 @@ This repo is to help store tools I will be using to help me and the team out.
 
 ## :sparkles: Features ##
 
-:heavy_check_mark: Feature 1;\
-:heavy_check_mark: Feature 2;\
-:heavy_check_mark: Feature 3;
+:heavy_check_mark: Audits ;\
+:heavy_check_mark: Security Scans;\
+:heavy_check_mark: Is Awesome!;
 
 ## :rocket: Technologies ##
 
 The following tools were used in this project:
 
-- [Expo](https://expo.io/)
-- [Node.js](https://nodejs.org/en/)
-- [React](https://pt-br.reactjs.org/)
-- [React Native](https://reactnative.dev/)
-- [TypeScript](https://www.typescriptlang.org/)
+- [Steampipe](https://steampipe.io/)
+- [Prowler](https://github.com/prowler-cloud/prowler)
+
 
 ## :white_check_mark: Requirements ##
 
@@ -77,13 +75,6 @@ $ git clone https://github.com/jrobison-commure/sectools
 # Access
 $ cd sectools
 
-# Install dependencies
-$ yarn
-
-# Run the project
-$ yarn start
-
-# The server will initialize in the <http://localhost:3000>
 ```
 
 ## :memo: License ##
