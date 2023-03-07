@@ -1,0 +1,6 @@
+# In splunk you can run the following to find the containers. 
+# 
+# | inputlookup container_image_tracker
+# |  search clusterName="*commureos*"
+
+---
