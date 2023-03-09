@@ -1,0 +1,65 @@
+name: Hardening Containers
+
+on: [push]
+
+jobs:
+  harden:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Harden Containers
+      run: |
+        # Install Docker
+        apt-get update
+        apt-get install -y docker.io
+        # Harden Containers
+        # Set up user namespace
+        echo "user.max_user_namespaces=15000" >> /etc/sysctl.conf
+        sysctl -p
+        # Set up AppArmor
+        apt-get install -y apparmor
+        # Set up SELinux
+        apt-get install -y selinux
+        # Set up auditd
+        apt-get install -y auditd
+        # Set up auditd rules
+        cat << EOF > /etc/audit/rules.d/audit.rules
+        -w /etc/selinux/ -p wa -k selinux
+        -w /etc/apparmor/ -p wa -k apparmor
+        -w /etc/docker/ -p wa -k docker
+        -w /var/lib/docker/ -p wa -k docker
+        EOF
+        # Set up auditd configuration
+        cat << EOF > /etc/audit/auditd.conf
+        log_file = /var/log/audit/audit.log
+        log_format = RAW
+        log_group = root
+        priority_boost = 4
+        flush = INCREMENTAL
+        freq = 20
+        num_logs = 5
+        disp_qos = lossy
+        dispatcher = /sbin/audispd
+        name_format = NONE
+        ##name = mydomain
+        max_log_file = 6
+        max_log_file_action = ROTATE
+        EOF
+        # Set up auditd service
+        systemctl enable auditd
+        systemctl start auditd
+        # Set up Docker daemon configuration
+        cat << EOF > /etc/docker/daemon.json
+        {
+          "log-driver": "json-file",
+          "log-opts": {
+            "max-size": "10m",
+            "max-file": "3"
+          },
+          "selinux-enabled": true,
+          "apparmor-profile": "docker-default",
+          "live-restore": true
+        }
+        EOF
+        # Restart Docker
+        systemctl restart docker
