@@ -1,0 +1,20 @@
+name: Continus Development
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Co-Sign and Cloudsmith
+      uses: cloudsmith-actions/cosign@v1
+      with:
+        cosign_token: ${{ secrets.COSIGN_TOKEN }}
+        cloudsmith_token: ${{ secrets.CLOUDSMITH_TOKEN }}
+    - name: Scan Container Images
+      uses: cloudsmith-actions/cosign@v1
+      with:
+        scan_type: container
+        cosign_token: ${{ secrets.COSIGN_TOKEN }}
+        cloudsmith_token: ${{ secrets.CLOUDSMITH_TOKEN }}

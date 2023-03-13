@@ -1,0 +1,22 @@
+name: ArgoCD Workflow Example
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install ArgoCD
+      run: |
+        curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/download/v1.7.7/argocd-linux-amd64
+        chmod +x /usr/local/bin/argocd
+    - name: Login to ArgoCD
+      run: argocd login localhost:8080 --username admin --password password
+    - name: Deploy to ArgoCD
+      run: argocd app create myapp --repo https://github.com/myorg/myrepo --path myapp --dest-server https://kubernetes.default.svc --dest-namespace default
+    - name: Sync ArgoCD
+      run: argocd app sync myapp

@@ -1,0 +1,16 @@
+name: cosign-installer
+
+on: [push]
+
+jobs:
+  verify-cosign-release:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Verify Cosign Release
+      run: |
+        sha256sum -c cosign-release.sha256
+        if [ $? -ne 0 ]; then
+            echo "Cosign release integrity check failed!"
+            exit 1
+        fi

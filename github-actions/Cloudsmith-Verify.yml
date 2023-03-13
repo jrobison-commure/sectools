@@ -1,0 +1,16 @@
+name: Cloudsmith Verify
+
+on: [push]
+
+jobs:
+  cloudsmith-verify:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Cloudsmith Verify
+      uses: cloudsmith-actions/verify@v1
+      with:
+        api_key: ${{ secrets.CLOUDSMITH_API_KEY }}
+        repository: <repository>
+        package: <package>
+        version: <version>

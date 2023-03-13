@@ -1,0 +1,15 @@
+name: Check CPU and Memory Limits
+
+on: [push]
+
+jobs:
+  check-limits:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check CPU and Memory Limits
+      run: |
+        echo "Checking CPU and Memory Limits..."
+        CPU_LIMIT=$(cat /sys/fs/cgroup/cpu/cpu.cfs_quota_us)
+        MEM_LIMIT=$(cat /sys/fs/cgroup/memory/memory.limit_in_bytes)
+        echo "CPU Limit: $CPU_LIMIT"
+        echo "Memory Limit: $MEM_LIMIT"
