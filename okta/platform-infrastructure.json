@@ -1,0 +1,20 @@
+// First, we need to create the group in Okta
+const group = await oktaClient.createGroup({
+  profile: {
+    name: 'platform-infrastructure'
+  }
+});
+
+// Next, we need to add the users to the group
+await group.addUser(oktaClient.getUser('roy'));
+await group.addUser(oktaClient.getUser('collin'));
+
+// Finally, we need to configure the application to expose the group claim
+const app = await oktaClient.getApplication('appId');
+await app.update({
+  settings: {
+    oauthClient: {
+      groupClaims: ['platform-infrastructure']
+    }
+  }
+});
